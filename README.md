@@ -1,14 +1,15 @@
 # AIONER
 ***
-Biomedical named entity recognition (BioNER) is a critical task of text mining research in the biomedical field. The task aims to automatically recognize the entities of the specific biomedical concepts in the text. In this work, we present AIONER, a deep learning-based NER method that successfully integrates multiple manually curated datasets and recognizes multiple biomedical concepts at once by a novel all-in-one (AIO) scheme..
+Biomedical named entity recognition (BioNER) is a critical task of text mining research in the biomedical field. The task aims to automatically recognize the entities of the specific biomedical concepts in the text. In this work, we present AIONER, a deep learning-based NER method that successfully integrates multiple manually curated datasets and recognizes multiple biomedical concepts at once by a novel all-in-one (AIO) scheme.
 
 
 ## Content
 - [Dependency package](#package)
 - [Introduction of folders](#intro)
-- [Running Gene NER and Species Assignment](#pipeline)
-- [Training Gene NER](#GeneNER)
-- [Training Species Assignment](#SpeAss)
+- [Pre-trained model preparation](#preparation)
+- [Running AIONER](#tagging)
+- [Training a new AIONER model](#training)
+- [Format conversion](#preprocess)
 
 
 
@@ -29,23 +30,31 @@ To install all dependencies automatically using the command:
 <a name="intro"></a>
 
 - data
-	- Train_tmvar1-AIO.conll: all data (tmvar1 version) for AIONER training in CoNLL format.
-	- Train_tmvar3-AIO.conll: all data (tmvar3 version) for AIONER training in CoNLL format
+	- pubtator: the datasets in pubtator format
+	- conll: the datasets in CoNLL format
 - example: input example files, BioC and PubTator formats (abstract or full text)
-- src_python
-	- AIONER: the codes for AIONER
-- AIONER_Run.py: the script for running AIONER
-- AIONER_Training.py: the script for training AIONER model
-- AIONER_trained_models: pre-trianed models and trained NER models
-	- bioformer-cased-v1.0: the original bioformer model
-	- BiomedNLP-PubMedBERT-base-uncased-abstract: the original pubmedbert model
-	- AIONER
-		- Bioformer-Softmax-BEST-AIO_tmvar1(or 3).h5: the bioformer-softmax models in tmvar1(or 3) version
-		- PubmedBERT-CRF-BEST-AIO_tmvar1(or 3).h5: the pubmedbert-crf models in tmvar1(or 3) version
+- src: the codes for AIONER
+	- AIONER_Run.py: the script for running AIONER
+	- AIONER_Training.py: the script for training AIONER model
+	- Format_Preprocess.py: the preprocesing script to covert the pubtator format to conll format.
 - vocab: label files for NER
 
+
+## Pre-trained model preparation
+<a name="preparation"></a>
+
+To run this code, you need to first download [the model file](https://ftp.ncbi.nlm.nih.gov/pub/lu/PhenoTagger/models_v1.1.zip) ( it includes the files for two original pre-trained models and two AIONER models), then unzip and put the model folder into the AIONER folder.
+
+- bioformer-cased-v1.0: the original bioformer model files
+- BiomedNLP-PubMedBERT-base-uncased-abstract: the original PubMedBERT model files
+- AIONER:
+	- PubmedBERT-CRF-AIONER.h5: the PubMedBERT-CRF AIONER model
+	- Bioformer-softmax-AIONER.h5: the Bioformer-softmax AIONER model
+
+
+
 ## Running AIONER
-<a name="pipeline"></a>
+<a name="tagging"></a>
 Use our trained models (i.e., PubmedBERT/Bioformer) for running AIONER by *AIONER_Run.py*.
 
 The file has 4 parameters:
@@ -61,13 +70,13 @@ The input file format is [BioC(xml)](bioc.sourceforge.net) or [PubTator](https:/
 
 Run Example:
 
-    $ python AIONER_Run.py -i example/input/ -m AIONER_trained_models/AIONER/Bioformer-Softmax-BEST-AIO_tmvar1.h5 -e ALL -o example/output/
+    $ python AIONER_Run.py -i example/input/ -m pretrained_models/AIONER/Bioformer-softmax-AIONER.h5 -e ALL -o example/output/
 
 
 
 
 ## Training a new AIONER model
-<a name="GeneNER"></a>
+<a name="training"></a>
 
 
 You can train a new AIONER model using the */AIONER_Training.py** file.
@@ -86,12 +95,43 @@ Note that --valfile is an optional parameter. When the validation set is provide
 
 Run Example:
 
-    $ python NER_Training.py -t ./data/AIONER/Train_tmvar1-AIO.conll -v ./data/AIONER/BioRED_Test_refined-ALL.conll -e bioformer -d softmax -o ./models/
+    $ python NER_Training.py -t ./data/AIONER/AIONER_Train-ALL.conll  -e bioformer -d softmax -o ./models/
 
 After the training is finished, the trained model (e.g., *bioformer-softmax-es-AIO.h5*) will be generated in the output folder. If the development set is provided, two trained models (*bioformer-softmax-es-AIO.h5* for early stopping by the accuracy of training set; *bioformer-softmax-best-AIO.h5* for early stopping by the performance on the validation set) will be generated in the output folder.
 
 
+## Format conversion
+<a name="preprocess"></a>
 
+
+You can covert the pubtator format to conll format using the */Format_Preprocess.py** file.
+
+The file has 3 parameters:
+
+- --inpath, -i, help="the input folder of training set files in Pubtator format"
+- --mapfile, -m, help="the mapfile to coversion"
+- --outpath, -o, help="the output folder of the files in CoNLL format"
+
+
+
+Note that --mapfile is a file to guide the entity type and label. For example, in the file of "list_file.txt":
+
+"NCBIdisease.PubTator	Disease	Disease:DiseaseClass|SpecificDisease|CompositeMention|Modifier" denotes the input pubtator file is "NCBIdisease.PubTator", the AIONER-label is "Disease", and the entities with entity types of "DiseaseClass, SpecificDisease, CompositeMention, Modifier" are used and changed to a new entity type is "Disease".
+
+
+Run Example:
+
+    $ python Format_Preprocess.py -i ./data/AIONER/ori_pubtator/ -m ./data/AIONER/list_file.txt -o ./data/AIONER/conll/
+
+After the conversion, the all conll files used for training need to merge into a file.
 
 ## Acknowledgments
 This research was supported by the Intramural Research Program of the National Library of Medicine (NLM), National Institutes of Health.
+
+
+
+## Disclaimer
+
+This tool shows the results of research conducted in the Computational Biology Branch, NCBI. The information produced on this website is not intended for direct diagnostic use or medical decision-making without review and oversight by a clinical professional. Individuals should not change their health behavior solely on the basis of information produced on this website. NIH does not independently verify the validity or utility of the information produced by this tool. If you have questions about the information produced on this website, please see a health care professional. More information about NCBI's disclaimer policy is available.
+
+***
