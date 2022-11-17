@@ -164,6 +164,10 @@ def labeltext_to_conll(infile,type_label,ori_label):
     all_context=fin.read().strip().split('\n')
     fin.close()
     fout=[]
+    if type_label=='ALL':
+        O_TAG='O'
+    else:
+        O_TAG="O-"+type_label
     
     nlp = stanza.Pipeline(lang='en', processors={'tokenize': 'spacy'},package='None') #package='craft'
     # nlp = stanza.Pipeline(lang='en', processors='tokenize',package='craft') #package='craft'
@@ -172,14 +176,14 @@ def labeltext_to_conll(infile,type_label,ori_label):
 
         pmid=doc.split('\t')[0]
         # fout.append('#pmid:'+pmid+'\n')
-        fout.append('<'+type_label+'>\tO-'+type_label+'\n')
+        fout.append('<'+type_label+'>\t'+O_TAG+'\n')
         doc_text=doc.split('\t')[1]
         doc_text=pre_token(doc_text)
         doc_stanza = nlp(doc_text)
         doc_i+=1
         # print(doc_i)
         inentity_flag=0
-        last_label='O-'+type_label
+        last_label=O_TAG
         
         for sent in doc_stanza.sentences:
             temp_sent=[]
@@ -197,8 +201,8 @@ def labeltext_to_conll(infile,type_label,ori_label):
                     last_label=word.text
                     inentity_flag=0                    
                 else:
-                    if last_label=='O-'+type_label:
-                        now_label='O-'+type_label
+                    if last_label==O_TAG:
+                        now_label=O_TAG
                     elif last_label.startswith('ssss')==True:
                         now_label='B-'+ori_label[last_label[4:]]
                         
@@ -207,7 +211,7 @@ def labeltext_to_conll(infile,type_label,ori_label):
                     elif last_label.startswith('I-')==True:
                         now_label='I-'+last_label[2:]  
                     elif last_label.startswith('eeee')==True:
-                        now_label='O-'+type_label
+                        now_label=O_TAG
                         
                     fout.append(word.text+'\t'+now_label+'\n')
                     last_label=now_label
@@ -217,9 +221,9 @@ def labeltext_to_conll(infile,type_label,ori_label):
                 # print(temp_sent)
                 pass
             else:
-                fout.append('</'+type_label+'>\tO-'+type_label+'\n')
+                fout.append('</'+type_label+'>\t'+O_TAG+'\n')
                 fout.append('\n')
-                fout.append('<'+type_label+'>\tO-'+type_label+'\n')
+                fout.append('<'+type_label+'>\t'+O_TAG+'\n')
         fout.pop()
         # fout.append('\n')
     return fout

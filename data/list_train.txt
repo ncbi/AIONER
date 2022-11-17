@@ -1,0 +1,11 @@
+BC5CDR_TrainDev.PubTator	Chemical	Chemical:Chemical
+BC5CDR_TrainDev.PubTator	Disease	Disease:Disease
+BioID_Train_revision.PubTator	CellLine	CellLine:CellLine
+BioRED_TrainDev.PubTator	ALL	Gene:Gene	Chemical:Chemical	Disease:Disease	CellLine:CellLine	Species:Species	Variant:Variant
+GNormPlus_Train.PubTator	Gene	Gene:Gene|FamilyName
+Linnaeus_Train.PubTator	Species	Species:Species
+NCBIdisease_TrainDev.PubTator	Disease	Disease:DiseaseClass|SpecificDisease|CompositeMention|Modifier
+NLMchem_TrainDev.PubTator	Chemical	Chemical:Chemical
+NLMgene_Train.PubTator	Gene	Gene:Gene|FamilyName
+SPECIES_Train.PubTator	Species	Species:Species
+tmVar3_Train.PubTator	Variant	Variant:OtherMutation|ProteinMutation|DNAMutation|SNP|AcidChange|ProteinAllele|DNAAllele

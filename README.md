@@ -9,6 +9,7 @@ Biomedical named entity recognition (BioNER) is a critical task of text mining r
 - [Pre-trained model preparation](#preparation)
 - [Running AIONER](#tagging)
 - [Training a new AIONER model](#training)
+- [Fine-tune for a new NER task](#app)
 - [Format conversion](#preprocess)
 
 
@@ -36,7 +37,8 @@ To install all dependencies automatically using the command:
 - src: the codes for AIONER
 	- AIONER_Run.py: the script for running AIONER
 	- AIONER_Training.py: the script for training AIONER model
-	- Format_Preprocess.py: the preprocesing script to covert the pubtator format to conll format.
+	- AIONER_FineTune.py: the script for fine-tuning AIONER model for the new NER task
+	- Format_Preprocess.py: the preprocesing script to covert the pubtator format to conll format
 - vocab: label files for NER
 
 
@@ -57,10 +59,11 @@ To run this code, you need to first download [the model file](https://ftp.ncbi.n
 <a name="tagging"></a>
 Use our trained models (i.e., PubmedBERT/Bioformer) for running AIONER by *AIONER_Run.py*.
 
-The file has 4 parameters:
+The file has 5 parameters:
 
 - --inpath, -i, help="input folder"
 - --model, -m, help="trained AIONER model file"
+- --vocabfile, -v, help="vocab file with BIO label"
 - --entity, -e, help="predict entity type (Gene, Chemical, Disease, Mutation, Species, CellLine, ALL)"
 - --outpath, -o, help="output folder to save the AIONER tagged results"
 
@@ -70,7 +73,7 @@ The input file format is [BioC(xml)](bioc.sourceforge.net) or [PubTator](https:/
 
 Run Example:
 
-    $ python AIONER_Run.py -i example/input/ -m pretrained_models/AIONER/Bioformer-softmax-AIONER.h5 -e ALL -o example/output/
+    $ python AIONER_Run.py -i ../example/input/ -m ../pretrained_models/AIONER/Bioformer-softmax-AIONER.h5 -v ../vocab/AIO_label.vocab -e ALL -o ../example/output/
 
 
 
@@ -95,9 +98,41 @@ Note that --valfile is an optional parameter. When the validation set is provide
 
 Run Example:
 
-    $ python NER_Training.py -t ./data/AIONER/AIONER_Train-ALL.conll  -e bioformer -d softmax -o ./models/
+    $ python NER_Training.py -t ../data/AIONER/AIONER_Train-ALL.conll  -e bioformer -d softmax -o ../models/
 
 After the training is finished, the trained model (e.g., *bioformer-softmax-es-AIO.h5*) will be generated in the output folder. If the development set is provided, two trained models (*bioformer-softmax-es-AIO.h5* for early stopping by the accuracy of training set; *bioformer-softmax-best-AIO.h5* for early stopping by the performance on the validation set) will be generated in the output folder.
+
+
+
+## Fine-tune for a new NER task
+<a name="app"></a>
+Use our pretrained AIONER models for fine-tuning a new NER task.
+
+First, you need to fine-tune the model using the new training set by */AIONER_FineTune.py** file.
+
+The file has 5 parameters:
+
+- --trainfile, -t, help="the training set file"
+- --devfile, -d, help="the development set file"
+- --vocabfile, -v, help="vocab file with BIO label"
+- --modeltype, -m, help="deep learning model (bioformer or pubmedbert?)"
+- --outpath, -o, help="the fine-tuned model output folder"
+
+Note that, the input file is conll format with adding <ALL></ALL> tags. You can covert the pubtator format to conll format using the */Format_Preprocess.py** file. Moreover, --devfile is an optional parameter. When the development set is provided, the model training will early stop by the performance on the development. If no, the model training will early stop by the accuracy of training set. 
+
+Run Example:
+
+    $ python AIONER_FineTune.py -t ../data/conll/AnEM_train.conll -v ../vocab/AnEM_label.vocab -m bioformer -o ../models/
+
+After the training is finished, the trained model (e.g., *bioformer-softmax-es-finetune.h5*) will be generated in the output folder. If the development set is provided, two trained models (*bioformer-softmax-es-finetune.h5* for early stopping by the accuracy of training set; *bioformer-softmax-best-finetune.h5* for early stopping by the performance on the validation set) will be generated in the output folder.
+
+
+Then you can use the fine-tune model for tagging by */AIONER_Run.py** file.
+
+
+Run Example:
+
+    $ python AIONER_Run.py -i ../example/input/ -m bioformer-softmax-es-finetune.h5 -v ../vocab/AnEM_label.vocab -e ALL -o example/output/
 
 
 ## Format conversion
@@ -121,7 +156,7 @@ Note that --mapfile is a file to guide the entity type and label. For example, i
 
 Run Example:
 
-    $ python Format_Preprocess.py -i ./data/AIONER/ori_pubtator/ -m ./data/AIONER/list_file.txt -o ./data/AIONER/conll/
+    $ python Format_Preprocess.py -i ../data/pubtator/ -m ../data/list_train.txt -o ../data/conll/
 
 After the conversion, the all conll files used for training need to merge into a file.
 

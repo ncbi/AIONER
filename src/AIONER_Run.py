@@ -174,12 +174,12 @@ def NER_main_path(inpath, para_set, outpath, modelfile):
         
         
         if para_set['encoder_type']=='pubmedbert':
-            vocabfiles={'labelfile':'../vocab/AIO_label.vocab',
+            vocabfiles={'labelfile':para_set['vocabfile'],
                         'checkpoint_path':'../pretrained_models/BiomedNLP-PubMedBERT-base-uncased-abstract/',
                         'lowercase':True,
                         } 
         elif para_set['encoder_type']=='bioformer':
-            vocabfiles={'labelfile':'../vocab/AIO_label.vocab',
+            vocabfiles={'labelfile':para_set['vocabfile'],
                         'checkpoint_path':'../pretrained_models/bioformer-cased-v1.0/',
                         'lowercase':False,
                         }    
@@ -229,6 +229,7 @@ if __name__=="__main__":
     parser.add_argument('--inpath', '-i', help="input path",default='../example/input/')
     parser.add_argument('--model', '-m', help="trained deep learning NER model file",default='../pretrained_models/AIONER/Bioformer-softmax-AIONER.h5')
     parser.add_argument('--entity', '-e', help="predict entity type (Gene, Chemical, Disease, Variant, Species, CellLine, ALL)",default='ALL')
+    parser.add_argument('--vocabfile', '-v', help="vocab file with BIO label",default='../vocab/AIO_label.vocab')
     parser.add_argument('--outpath', '-o', help="output path to save the NER tagged results",default='../example/output/')
     args = parser.parse_args()
     
@@ -243,7 +244,8 @@ if __name__=="__main__":
     para_set={
               'encoder_type':model_paras[0].lower(), # pubmedbert or bioformer
               'decoder_type':model_paras[1].lower(),# crf or softmax
-              'entity_type':args.entity
+              'entity_type':args.entity,
+              'vocabfile':args.vocabfile
               }
     print('run parameters:', para_set)
 
