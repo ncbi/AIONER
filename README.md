@@ -82,7 +82,7 @@ Run Example:
 <a name="training"></a>
 
 
-You can train a new AIONER model using the */AIONER_Training.py** file.
+You can train a new AIONER model using the *AIONER_Training.py* file.
 
 The file has 5 parameters:
 
@@ -108,7 +108,7 @@ After the training is finished, the trained model (e.g., *bioformer-softmax-es-A
 <a name="app"></a>
 Use our pretrained AIONER models for fine-tuning a new NER task.
 
-First, you need to fine-tune the model using the new training set by */AIONER_FineTune.py** file.
+First, you need to fine-tune the model using the new training set by *AIONER_FineTune.py* file.
 
 The file has 5 parameters:
 
@@ -118,7 +118,7 @@ The file has 5 parameters:
 - --modeltype, -m, help="deep learning model (bioformer or pubmedbert?)"
 - --outpath, -o, help="the fine-tuned model output folder"
 
-Note that, the input file is conll format with adding <ALL></ALL> tags. You can covert the pubtator format to conll format using the */Format_Preprocess.py** file. Moreover, --devfile is an optional parameter. When the development set is provided, the model training will early stop by the performance on the development. If no, the model training will early stop by the accuracy of training set. 
+Note that, the input file is conll format with adding <ALL></ALL> tags. You can covert the pubtator format to conll format using the *Format_Preprocess.py* file. Moreover, --devfile is an optional parameter. When the development set is provided, the model training will early stop by the performance on the development. If no, the model training will early stop by the accuracy of training set. 
 
 Run Example:
 
@@ -127,7 +127,7 @@ Run Example:
 After the training is finished, the trained model (e.g., *bioformer-softmax-es-finetune.h5*) will be generated in the output folder. If the development set is provided, two trained models (*bioformer-softmax-es-finetune.h5* for early stopping by the accuracy of training set; *bioformer-softmax-best-finetune.h5* for early stopping by the performance on the validation set) will be generated in the output folder.
 
 
-Then you can use the fine-tune model for tagging by */AIONER_Run.py** file.
+Then you can use the fine-tune model for tagging by *AIONER_Run.py* file.
 
 
 Run Example:
@@ -139,7 +139,7 @@ Run Example:
 <a name="preprocess"></a>
 
 
-You can covert the pubtator format to conll format using the */Format_Preprocess.py** file.
+You can covert the pubtator format to conll format using the *Format_Preprocess.py* file.
 
 The file has 3 parameters:
 
