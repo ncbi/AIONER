@@ -98,7 +98,7 @@ Note that --valfile is an optional parameter. When the validation set is provide
 
 Run Example:
 
-    $ python NER_Training.py -t ../data/AIONER/AIONER_Train-ALL.conll  -e bioformer -d softmax -o ../models/
+    $ python AIONER_Training.py -t ../data/conll/Merged_All-AIO.conll  -e bioformer -d softmax -o ../models/
 
 After the training is finished, the trained model (e.g., *bioformer-softmax-es-AIO.h5*) will be generated in the output folder. If the development set is provided, two trained models (*bioformer-softmax-es-AIO.h5* for early stopping by the accuracy of training set; *bioformer-softmax-best-AIO.h5* for early stopping by the performance on the validation set) will be generated in the output folder.
 
