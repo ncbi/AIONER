@@ -64,7 +64,7 @@ The file has 5 parameters:
 - --inpath, -i, help="input folder"
 - --model, -m, help="trained AIONER model file"
 - --vocabfile, -v, help="vocab file with BIO label"
-- --entity, -e, help="predict entity type (Gene, Chemical, Disease, Mutation, Species, CellLine, ALL)"
+- --entity, -e, help="predict entity type (Gene, Chemical, Disease, Variant, Species, CellLine, ALL)"
 - --outpath, -o, help="output folder to save the AIONER tagged results"
 
 The input file format is [BioC(xml)](bioc.sourceforge.net) or [PubTator](https://www.ncbi.nlm.nih.gov/CBBresearch/Lu/Demo/tmTools/Format.html) format. You can find some input examples in the /example/input/ folder .
