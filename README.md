@@ -45,7 +45,7 @@ To install all dependencies automatically using the command:
 ## Pre-trained model preparation
 <a name="preparation"></a>
 
-To run this code, you need to first download [the model file](https://ftp.ncbi.nlm.nih.gov/pub/lu/AIONER/pretrained_models.zip) ( it includes the files for two original pre-trained models and two AIONER models), then unzip and put the model folder into the AIONER folder.
+To run this code, you need to first download the model file ([pretrained_models.zip](https://huggingface.co/lingbionlp/AIONER-0415/tree/main)) ( it includes the files for two original pre-trained models and two AIONER models), then unzip and put the model folder into the AIONER folder.
 
 - bioformer-cased-v1.0: the original bioformer model files
 - BiomedNLP-PubMedBERT-base-uncased-abstract: the original PubMedBERT model files
