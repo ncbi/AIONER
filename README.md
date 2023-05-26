@@ -2,7 +2,7 @@
 ***
 Biomedical named entity recognition (BioNER) seeks to automatically recognize biomedical entities in natural language text, serving as a necessary foundation for downstream text mining tasks and applications. In this work, we propose AIONER, a new BioNER tagger that takes full advantage of various existing datasets for recognizing multiple entities simultaneously, through a novel all-in-one (AIO) scheme. This repo contains the source code and dataset for the AIONER. Please refer to our paper for more details:
 
-[Ling Luo, Chih-Hsuan Wei, Po-Ting Lai, Robert Leaman, Qingyu Chen, and Zhiyong Lu. "AIONER: All-in-one scheme-based biomedical named entity recognition using deep learning." arXiv preprint arXiv:2211.16944 (2022).](https://arxiv.org/abs/2211.16944)
+[Ling Luo, Chih-Hsuan Wei, Po-Ting Lai, Robert Leaman, Qingyu Chen, and Zhiyong Lu. "AIONER: All-in-one scheme-based biomedical named entity recognition using deep learning." Bioinformatics, Volume 39, Issue 5, May 2023, btad310.](https://doi.org/10.1093/bioinformatics/btad310)
 
 
 ## Content
